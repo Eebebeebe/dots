@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""Black out the left monitor (DP-1) until the cursor moves on it.
+
+Run again while blacked out to wake it manually (SUPER+B toggles).
+While blacked out, Hyprland's "any key / mouse move wakes all screens"
+options are switched off so in-game input on the right monitor doesn't
+wake it; they're restored on wake.
+"""
+import json, os, signal, subprocess, sys, time
+
+MONITOR = "DP-1"
+PIDFILE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "blackout-left.pid")
+POLL = 0.1
+
+
+def hypr(*args):
+    return subprocess.run(["hyprctl", *args], capture_output=True, text=True).stdout
+
+
+def dpms(action):
+    hypr("dispatch", f'hl.dsp.dpms({{action = "{action}", monitor = "{MONITOR}"}})')
+
+
+def wake_options(enabled):
+    v = "true" if enabled else "false"
+    hypr("eval", f"hl.config({{misc={{key_press_enables_dpms={v}, mouse_move_enables_dpms={v}}}}})")
+
+
+def monitor_rect():
+    for m in json.loads(hypr("monitors", "-j")):
+        if m["name"] == MONITOR:
+            s = m["scale"]
+            return m["x"], m["y"], m["width"] / s, m["height"] / s, m
+    sys.exit(f"{MONITOR} not found")
+
+
+def cursor():
+    x, y = hypr("cursorpos").split(",")
+    return int(x), int(y)
+
+
+def is_on(x, y, rect):
+    rx, ry, rw, rh, _ = rect
+    return rx <= x < rx + rw and ry <= y < ry + rh
+
+
+# Toggle: if already running, signal it to wake and exit.
+try:
+    pid = int(open(PIDFILE).read())
+    os.kill(pid, signal.SIGTERM)
+    sys.exit(0)
+except (FileNotFoundError, ValueError, ProcessLookupError):
+    pass
+
+open(PIDFILE, "w").write(str(os.getpid()))
+done = False
+
+
+def restore(*_):
+    global done
+    done = True
+
+
+signal.signal(signal.SIGTERM, restore)
+signal.signal(signal.SIGINT, restore)
+
+rect = monitor_rect()
+# If the cursor is on the left monitor, park it in the middle of the other one
+if is_on(*cursor(), rect):
+    others = [m for m in json.loads(hypr("monitors", "-j")) if m["name"] != MONITOR]
+    if others:
+        o = others[0]
+        cx = int(o["x"] + o["width"] / o["scale"] / 2)
+        cy = int(o["y"] + o["height"] / o["scale"] / 2)
+        hypr("dispatch", f"hl.dsp.cursor.move({{x = {cx}, y = {cy}}})")
+        time.sleep(0.05)
+wake_options(False)
+dpms("off")
+last = cursor()
+
+try:
+    while not done:
+        time.sleep(POLL)
+        pos = cursor()
+        # Wake when the cursor moves while it's on the blacked-out monitor
+        if pos != last and is_on(*pos, rect):
+            break
+        last = pos
+        # Something else turned it back on (e.g. hypridle resume) -> stop
+        m = next((m for m in json.loads(hypr("monitors", "-j")) if m["name"] == MONITOR), None)
+        if m is None or m.get("dpmsStatus"):
+            break
+finally:
+    dpms("on")
+    wake_options(True)
+    try:
+        os.remove(PIDFILE)
+    except FileNotFoundError:
+        pass

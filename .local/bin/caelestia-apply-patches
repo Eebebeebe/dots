@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Re-apply local Caelestia shell patches (bar clock calendar, hover delays,
+# bar right-click -> pavucontrol) to the root-owned package files.
+# Needed after every caelestia-shell update, and once on a fresh machine.
+set -euo pipefail
+
+SRC="$HOME/.config/caelestia/patches-backup"
+DST=/etc/xdg/quickshell/caelestia
+want=$(cat "$SRC/VERSION")
+have=$(pacman -Q caelestia-shell)
+
+if [[ "$have" != "$want" && "${1:-}" != "--force" ]]; then
+    echo "Patches were made against '$want' but '$have' is installed."
+    echo "The patched files replace whole upstream files, so this could break the shell."
+    echo "Check the diff first:  diff -ru $DST $SRC   (then re-run with --force)"
+    exit 1
+fi
+
+cd "$SRC"
+find modules -type f | while read -r f; do
+    sudo install -Dm644 "$f" "$DST/$f"
+    echo "patched $DST/$f"
+done
+
+echo "Restarting Caelestia shell..."
+qs -c caelestia kill 2>/dev/null || true
+setsid -f qs -c caelestia -n -d >/dev/null 2>&1

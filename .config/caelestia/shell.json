@@ -1,0 +1,87 @@
+{
+  "appearance": {
+    "transparency": {
+      "enabled": false
+    }
+  },
+  "background": {
+    "wallpaperEnabled": true
+  },
+  "bar": {
+    "activeWindow": {
+      "compact": true,
+      "inverted": false,
+      "showOnHover": false
+    },
+    "clock": {
+      "background": true,
+      "showDate": true,
+      "showSeconds": false
+    },
+    "persistent": true,
+    "popouts": {
+      "activeWindow": false
+    },
+    "scrollActions": {
+      "brightness": false,
+      "workspaces": true
+    },
+    "statusIcons": [
+      {
+        "enabled": true,
+        "id": "lockStatus"
+      },
+      {
+        "enabled": false,
+        "id": "audio"
+      },
+      {
+        "enabled": false,
+        "id": "microphone"
+      },
+      {
+        "enabled": false,
+        "id": "kbLayout"
+      },
+      {
+        "enabled": true,
+        "id": "network"
+      },
+      {
+        "enabled": true,
+        "id": "bluetooth"
+      },
+      {
+        "enabled": false,
+        "id": "battery"
+      }
+    ],
+    "tray": {
+      "compact": false
+    },
+    "workspaces": {
+      "shown": 5
+    },
+    "excludedScreens": [
+      "DP-2"
+    ]
+  },
+  "general": {
+    "apps": {
+      "terminal": [
+        "kitty"
+      ]
+    },
+    "idle": {
+      "timeouts": []
+    }
+  },
+  "services": {
+    "clockFormat": "TwelveHour",
+    "weatherUnits": "Celsius"
+  },
+  "sidebar": {
+    "dragThreshold": 80,
+    "enabled": true
+  }
+}

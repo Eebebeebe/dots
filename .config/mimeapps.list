@@ -1,0 +1,18 @@
+[Default Applications]
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+image/png=org.gnome.Loupe.desktop
+image/jpeg=org.gnome.Loupe.desktop
+application/pdf=mupdf.desktop
+text/vnd.trolltech.linguist=mpv.desktop
+text/html=firefox.desktop
+x-scheme-handler/unityhub=unityhub.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+
+[Added Associations]
+image/jpeg=org.gnome.Loupe.desktop;
+application/pdf=mupdf.desktop;
+image/png=org.gnome.Loupe.desktop;
+text/vnd.trolltech.linguist=vlc.desktop;mpv.desktop;
+text/html=firefox.desktop;
+x-scheme-handler/unityhub=unityhub.desktop;
