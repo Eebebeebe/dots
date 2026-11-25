@@ -38,9 +38,9 @@ Item {
     property Title current: text1
 
     clip: true
-    // In slim mode the rotated title's line box is wider than the bar, which
-    // makes the layout left-align it; cap it so it stays centred (glyphs fit).
-    implicitWidth: slim ? Math.min(Math.max(icon.implicitWidth, current.implicitHeight), Tokens.sizes.bar.innerWidth) : Math.max(icon.implicitWidth, current.implicitHeight)
+    // Slim mode: use exactly the bar width so centring lands on whole pixels
+    // (an odd-width item gets rounded ~1px off-centre in the narrow bar)
+    implicitWidth: slim ? Tokens.sizes.bar.innerWidth : Math.max(icon.implicitWidth, current.implicitHeight)
     implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin
 
     Loader {
@@ -73,6 +73,9 @@ Item {
         id: icon
 
         anchors.horizontalCenter: parent.horizontalCenter
+        // Slim mode: span the full width and centre the glyph by alignment
+        width: root.slim ? root.width : implicitWidth
+        horizontalAlignment: Text.AlignHCenter
 
         animate: true
         text: Icons.getAppCategoryIcon(Hypr.activeToplevel?.lastIpcObject.class, "desktop_windows")

@@ -18,6 +18,29 @@ ColumnLayout {
     required property BarPopouts.Wrapper popouts
     required property bool fullscreen
     readonly property int vPadding: Tokens.padding.large
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
+
+    // Slim mode: size the spacers so the active window title is centred on the
+    // bar itself, not just in the gap between the top and bottom modules.
+    function spacerHeight(entryIndex: int): real {
+        const entries = children.filter(c => c.entryId !== undefined).sort((a, b) => a.index - b.index);
+        const spacers = entries.filter(e => e.entryId === "spacer");
+        const others = entries.filter(e => e.entryId !== "spacer");
+        const free = height - vPadding * 2 - spacing * Math.max(0, entries.length - 1) - others.reduce((acc, e) => acc + e.implicitHeight, 0);
+        const aw = others.find(e => e.entryId === "activeWindow");
+        const before = aw ? spacers.filter(e => e.index < aw.index) : [];
+        const after = aw ? spacers.filter(e => e.index > aw.index) : [];
+        if (free <= 0)
+            return 0;
+        if (!aw || before.length === 0 || after.length === 0)
+            return free / Math.max(1, spacers.length);
+
+        // Where the title's top would need to be for its centre to sit mid-bar
+        const contentAbove = vPadding + entries.filter(e => e.index < aw.index).length * spacing + others.filter(e => e.index < aw.index).reduce((acc, e) => acc + e.implicitHeight, 0);
+        const top = Math.max(0, Math.min(free, height / 2 - aw.implicitHeight / 2 - contentAbove));
+        return entryIndex < aw.index ? top / before.length : (free - top) / after.length;
+    }
 
     function closeTray(): void {
         if (!Config.bar.tray.compact)
@@ -124,7 +147,10 @@ ColumnLayout {
             DelegateChoice {
                 roleValue: "spacer"
                 delegate: EntryWrapper {
-                    Layout.fillHeight: true
+                    id: spacer
+
+                    Layout.fillHeight: !root.slim
+                    Layout.preferredHeight: root.slim ? root.spacerHeight(spacer.index) : -1
                 }
             }
             DelegateChoice {

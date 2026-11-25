@@ -24,4 +24,10 @@ done
 
 echo "Restarting Caelestia shell..."
 qs -c caelestia kill 2>/dev/null || true
+# 'kill' returns before the old shell has exited; starting the new one with -n
+# (no duplicates) too early makes it quit immediately. Wait for it to go away.
+for _ in $(seq 50); do
+    pgrep -u "$USER" -f '^qs -c caelestia' >/dev/null || break
+    sleep 0.1
+done
 setsid -f qs -c caelestia -n -d >/dev/null 2>&1
