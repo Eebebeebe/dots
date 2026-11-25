@@ -7,6 +7,8 @@ import qs.utils
 
 Item {
     id: root
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
 
     implicitWidth: Math.round(Tokens.font.body.large.pointSize * 1.2)
     implicitHeight: Math.round(Tokens.font.body.large.pointSize * 1.2)
@@ -30,8 +32,8 @@ Item {
         id: caelestiaLogo
 
         Logo {
-            implicitWidth: Math.round(Tokens.font.body.large.pointSize * 1.25)
-            implicitHeight: Math.round(Tokens.font.body.large.pointSize * 1.25)
+            implicitWidth: Math.round(Tokens.font.body.large.pointSize * (root.slim ? 1.25 : 1.6))
+            implicitHeight: Math.round(Tokens.font.body.large.pointSize * (root.slim ? 1.25 : 1.6))
         }
     }
 

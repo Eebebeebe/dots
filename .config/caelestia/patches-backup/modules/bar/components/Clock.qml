@@ -10,10 +10,12 @@ import qs.services
 
 StyledRect {
     id: root
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
 
     readonly property color colour: Colours.palette.m3tertiary
     readonly property int padding: Config.bar.clock.background ? Tokens.padding.medium : Tokens.padding.extraSmall
-    readonly property var font: Tokens.font.body.builders.small.scale(0.95)
+    readonly property var font: Tokens.font.body.builders.small.scale(slim ? 0.95 : 1.1)
 
     function fontFor(text: string, metricWidth: int): font {
         // We don't count seconds for the max width because it changes too often
@@ -63,7 +65,7 @@ StyledRect {
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: Time.format("ddd")
-                    font: Tokens.font.body.builders.small.scale(0.7).build()
+                    font: Tokens.font.body.builders.small.scale(root.slim ? 0.7 : 0.9).build()
                     color: root.colour
                 }
 
@@ -145,7 +147,7 @@ StyledRect {
 
             sourceComponent: StyledText {
                 text: Time.amPmStr.toLowerCase()
-                font: Tokens.font.body.builders.small.scale(0.7).build()
+                font: Tokens.font.body.builders.small.scale(root.slim ? 0.7 : 0.9).build()
                 color: root.colour
             }
         }

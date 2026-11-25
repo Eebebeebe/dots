@@ -11,6 +11,8 @@ import qs.modules.bar.components.status
 
 StyledRect {
     id: root
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
 
     property color colour: Colours.palette.m3secondary
     readonly property alias items: iconColumn
@@ -85,7 +87,7 @@ StyledRect {
                             animate: true
                             text: Icons.getVolumeIcon(Audio.volume, Audio.muted)
                             color: root.colour
-                            fontStyle: Tokens.font.icon.small
+                            fontStyle: root.slim ? Tokens.font.icon.small : Tokens.font.icon.medium
                             fill: 1
                         }
                     }
@@ -100,7 +102,7 @@ StyledRect {
                             animate: true
                             text: Icons.getMicVolumeIcon(Audio.sourceVolume, Audio.sourceMuted)
                             color: root.colour
-                            fontStyle: Tokens.font.icon.small
+                            fontStyle: root.slim ? Tokens.font.icon.small : Tokens.font.icon.medium
                             fill: 1
                         }
                     }
@@ -112,7 +114,7 @@ StyledRect {
                             animate: true
                             text: Hypr.kbLayout
                             color: root.colour
-                            font: Tokens.font.mono.small
+                            font: root.slim ? Tokens.font.mono.small : Tokens.font.mono.medium
                         }
                     }
                 }

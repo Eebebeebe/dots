@@ -9,6 +9,8 @@ import qs.services
 
 StyledRect {
     id: root
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
 
     readonly property alias layout: layout
     readonly property alias items: items
@@ -106,7 +108,7 @@ StyledRect {
                 anchors.bottomMargin: Config.bar.tray.background ? Tokens.padding.extraSmall : -Tokens.padding.small
                 text: "expand_less"
                 color: Colours.palette.m3onSurfaceVariant
-                fontStyle: Tokens.font.icon.small
+                fontStyle: root.slim ? Tokens.font.icon.small : Tokens.font.icon.medium
                 rotation: root.expanded ? 180 : 0
 
                 Behavior on rotation {

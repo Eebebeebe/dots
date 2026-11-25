@@ -5,6 +5,8 @@ import qs.services
 
 Item {
     id: root
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
 
     required property ScreenState screenState
 
@@ -28,6 +30,6 @@ Item {
 
         text: "power_settings_new"
         color: Colours.palette.m3error
-        fontStyle: Tokens.font.icon.builders.small.size(12).weight(Font.Bold).build()
+        fontStyle: root.slim ? Tokens.font.icon.builders.small.size(12).weight(Font.Bold).build() : Tokens.font.icon.builders.small.weight(Font.Bold).build()
     }
 }

@@ -9,12 +9,14 @@ import qs.utils
 
 MouseArea {
     id: root
+    // Slim mode: only when a (per-monitor) shell-tokens.json narrows the bar
+    readonly property bool slim: Tokens.sizes.bar.innerWidth < 32
 
     required property SystemTrayItem modelData
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
-    implicitWidth: Tokens.font.body.small.pointSize * 1.6
-    implicitHeight: Tokens.font.body.small.pointSize * 1.6
+    implicitWidth: Tokens.font.body.small.pointSize * (root.slim ? 1.6 : 2)
+    implicitHeight: Tokens.font.body.small.pointSize * (root.slim ? 1.6 : 2)
 
     onClicked: event => {
         if (event.button === Qt.LeftButton)
