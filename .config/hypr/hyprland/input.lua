@@ -20,6 +20,6 @@ hl.config({
     },
 
     cursor = {
-        hotspot_padding = 1,
+        hotspot_padding = 0, -- 0 so the cursor reaches the screen edge (Firefox fullscreen toolbar reveal needs y=0)
     },
 })
