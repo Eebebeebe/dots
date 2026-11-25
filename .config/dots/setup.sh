@@ -4,6 +4,11 @@
 set -uo pipefail
 D="$HOME/.config/dots"
 
+# `dots` alias for zsh (fish/bash get it from tracked files)
+if [[ -f ~/.zshrc ]] && ! grep -q "alias dots=" ~/.zshrc; then
+    printf "\n# dotfiles bare repo (see ~/.github/README.md)\nalias dots='git --git-dir=\$HOME/.dots --work-tree=\$HOME'\n" >> ~/.zshrc
+fi
+
 # Machine-specific files that aren't tracked (nwg-displays writes these)
 [[ -f ~/.config/hypr/monitors.lua ]] || echo "-- per-machine monitor layout (nwg-displays writes this)" > ~/.config/hypr/monitors.lua
 

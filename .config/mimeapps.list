@@ -1,4 +1,8 @@
 [Default Applications]
+inode/directory=thunar.desktop
+application/x-wayland-gnome-saved-search=thunar.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/http=firefox.desktop
 image/png=org.gnome.Loupe.desktop
@@ -10,6 +14,7 @@ x-scheme-handler/unityhub=unityhub.desktop
 x-scheme-handler/claude-cli=claude-code-url-handler.desktop
 
 [Added Associations]
+inode/directory=thunar.desktop;
 image/jpeg=org.gnome.Loupe.desktop;
 application/pdf=mupdf.desktop;
 image/png=org.gnome.Loupe.desktop;
