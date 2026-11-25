@@ -1,4 +1,5 @@
 amdonly-gaming-opencl-rusticl-mesa-git
+balena-etcher
 binaryninja-free
 burpsuite
 caelestia-cli
@@ -11,20 +12,22 @@ epson-inkjet-printer-escpr
 epson-inkjet-printer-escpr2
 equibop-bin
 etcher-bin
-f3
 gobuster-git
+google-chrome
 gtk-engine-murrine
 kcc
 kindlegen
+neofetch
 nufraw
 nuitka
 nwjs-bin
 papirus-folders
 pince
+pokemon-colorscripts-git
+preload
 pwvucontrol
 python-oletools
 qimgv-git
-qrcodegen
 qtengine
 stegsolve
 todoist-appimage
@@ -33,5 +36,4 @@ undertalemodtool-bin
 wallust
 wlogout
 yay
-yay-debug
 zsteg

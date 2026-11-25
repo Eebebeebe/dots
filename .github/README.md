@@ -30,8 +30,10 @@ dots checkout
 ~/.config/dots/setup.sh
 ```
 
-`setup.sh` optionally installs the package lists, applies the Caelestia patches,
-sets the colour scheme and wallpaper, and reloads Hyprland.
+`setup.sh` optionally installs the package lists (skipping names your repos/the AUR
+don't have, e.g. `steam`/`lib32-*` without `[multilib]`), installs oh-my-zsh and offers
+to make zsh the login shell, applies the Caelestia patches, sets the colour scheme
+and wallpaper, and reloads Hyprland.
 
 ## Notes
 
@@ -40,3 +42,8 @@ sets the colour scheme and wallpaper, and reloads Hyprland.
   left-monitor blackout) are harmless on machines without those outputs.
 - **Caelestia patches:** `~/.config/caelestia/patches-backup/` holds modified copies of
   root-owned QML files. After a `caelestia-shell` update run `caelestia-apply-patches`.
+- **Slim bar (laptops only):** `~/.config/caelestia/monitors/eDP-1/shell-tokens.json` narrows
+  the bar on the built-in laptop screen (`eDP-1`). The bar patches only shrink things
+  when the bar is that narrow, so other screens/machines keep the default bar.
+- **Manual extras:** `caelestia-firefox-theme` (CaelestiaFox) isn't in the AUR — it's
+  built by Caelestia's own installer (github.com/caelestia-dots/caelestia).
